@@ -3,6 +3,7 @@ package ait.album.dao;
 import ait.album.model.Photo;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.function.Predicate;
 
@@ -64,9 +65,18 @@ public class AlbumImpl implements Album {
 
     @Override
     public Photo[] getPhotoBetweenDate(LocalDate dateFrom, LocalDate dateTo) {
+
         return findPhotoByPredicate(e -> {
             LocalDate localDate = e.getDate().toLocalDate();
             return localDate.isAfter(dateFrom) && localDate.isBefore(dateTo);
+/*
+            String localDateTimeS = e.getDate().format(DateTimeFormatter.ISO_DATE_TIME);
+            localDateTimeS = localDateTimeS.substring(0, 10);
+            LocalDate localDate = LocalDate.parse(localDateTimeS, DateTimeFormatter.ISO_LOCAL_DATE);
+            if (localDate.isAfter(dateFrom) && localDate.isBefore(dateTo)) {
+                return true;
+            }
+            return false;*/
         });
     }
 
