@@ -35,15 +35,7 @@ class AlbumTest {
 
     @Test
     void addPhoto() {
-        boolean flag;
-        try {
-            album.addPhoto(null);
-            flag = true;
-        } catch (RuntimeException e) {
-            flag = false;
-            assertEquals("Photo is null", e.getMessage());
-        }
-        assertFalse(flag);
+        assertFalse(album.addPhoto(null));
         assertFalse(album.addPhoto(photos[3]));
         Photo photo = new Photo(5, 001, "Photo10", "Url10", LocalDateTime.now());
         assertTrue(album.addPhoto(photo));
@@ -85,12 +77,27 @@ class AlbumTest {
         Photo[] expected = {photos[5], photos[7]};
         assertArrayEquals(expected, actual);
         Photo[] actual1 = album.getAllPhotoFromAlbum(4545);
-        Photo[] expected1 = {};
+        Photo[] expected1 = new Photo[0];
         assertArrayEquals(expected1, actual1);
     }
 
     @Test
     void getPhotoBetweenDate() {
+        LocalDate dateFrom = LocalDate.parse("2023-01-01");
+        LocalDate dateTo = LocalDate.parse("2023-12-31");
+        Photo[] actual = album.getPhotoBetweenDate(dateFrom, dateTo);
+        Photo[] expected = {photos[5], photos[6], photos[8]};
+        assertArrayEquals(expected, actual);
+        dateFrom = LocalDate.parse("2024-02-01");
+        dateTo = LocalDate.parse("2024-05-31");
+        Photo[] actual0 = album.getPhotoBetweenDate(dateFrom, dateTo);
+        Photo[] expected0 = {photos[0], photos[2], photos[4]};
+        assertArrayEquals(expected0, actual0);
+        dateFrom = LocalDate.parse("2022-01-01");
+        dateTo = LocalDate.parse("2022-12-31");
+        Photo[] actual1 = album.getPhotoBetweenDate(dateFrom, dateTo);
+        Photo[] expected1 = new Photo[0];
+        assertArrayEquals(expected1, actual1);
     }
 
     @Test
