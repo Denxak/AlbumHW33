@@ -1,11 +1,9 @@
 package ait.album.dao;
 
 import ait.album.model.Photo;
-import org.junit.jupiter.api.BeforeEach;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.function.Predicate;
 
 public class AlbumImpl implements Album {
@@ -18,10 +16,7 @@ public class AlbumImpl implements Album {
 
     @Override
     public boolean addPhoto(Photo photo) {
-        if (photo == null) {
-            throw new RuntimeException("Photo is null");
-        }
-        if (photos.length == size || getPhotoFromAlbum(photo.getPhotoId(), photo.getAlbumId()) != null) {
+        if (photo == null || photos.length == size || getPhotoFromAlbum(photo.getPhotoId(), photo.getAlbumId()) != null) {
             return false;
         }
         photos[size++] = photo;
@@ -69,7 +64,10 @@ public class AlbumImpl implements Album {
 
     @Override
     public Photo[] getPhotoBetweenDate(LocalDate dateFrom, LocalDate dateTo) {
-        return new Photo[0];
+        return findPhotoByPredicate(e -> {
+            LocalDate localDate = e.getDate().toLocalDate();
+            return localDate.isAfter(dateFrom) && localDate.isBefore(dateTo);
+        });
     }
 
     @Override
